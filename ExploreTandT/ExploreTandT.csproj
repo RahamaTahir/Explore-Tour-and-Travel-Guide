@@ -317,7 +317,6 @@
     <Content Include="Views\Tour\GetPackage.cshtml" />
     <Content Include="Views\Tour\PackageConfirmation.cshtml" />
     <Content Include="Views\Tour\RelatedPackages.cshtml" />
-    <Content Include="Views\Tour\TermsandConditions.cshtml" />
     <Content Include="Views\Tour\TourGuideAccount.cshtml" />
     <Content Include="Views\Tour\TouristAccount.cshtml" />
   </ItemGroup>
