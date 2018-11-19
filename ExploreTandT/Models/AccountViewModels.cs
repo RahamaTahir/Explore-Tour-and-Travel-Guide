@@ -71,6 +71,7 @@ namespace ExploreTandT.Models
 
         [Required]
         [Display(Name ="Phone")]
+       [RegularExpression(@"^[0-9]+$" , ErrorMessage = "Phone Number should be in digits")]
         public string PhoneNumber { get; set; }
 
         [Required]
@@ -79,13 +80,13 @@ namespace ExploreTandT.Models
 
         [Required]
         [Display(Name = "CNIC")]
+        [StringLength(13, ErrorMessage ="CNIC must be 13 digits.", MinimumLength = 13)]
         public string CNIC { get; set; }
 
         [Required]
         [Display(Name = "Name")]
+        [RegularExpression(@"^[a-zA-Z ]*$", ErrorMessage = "Name should be in Alphabets")]
         public string Name { get; set; }
-
-
 
 
         [Required]
@@ -98,6 +99,11 @@ namespace ExploreTandT.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+      
+
+        [Required]
+        public string Type { get; set; }
     }
 
     public class ResetPasswordViewModel

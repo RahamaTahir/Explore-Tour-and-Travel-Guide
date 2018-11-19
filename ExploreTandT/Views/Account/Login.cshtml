@@ -21,17 +21,17 @@
                 {
                     @Html.AntiForgeryToken()
 
-                <div class="form-group">
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email Address" })
-                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-validate" })
-                </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email Address" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-validate" })
+                    </div>
 
-                <div class="form-group">
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
-                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-validate" })
-                </div>
-                    
-                    <input type="submit" value="Log in" class="btn btn-primary" />
+                    <div class="form-group">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-validate" })
+                    </div>
+
+                    <input type="submit" value="Log in" class="btn btn-primary btn-responsive" />
 
                     <div class="forgot">
                         <a href="~/Account/ForgotPassword/">Forgot password?</a>
@@ -41,7 +41,7 @@
                         <a href="~/Account/Register/">Sign Up </a>
                     </div>
                 }
-            </div>
+            
         </div>
     </div>
 </div>

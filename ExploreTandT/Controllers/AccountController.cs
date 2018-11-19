@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ExploreTandT.Models;
+using System.Collections.Generic;
 
 namespace ExploreTandT.Controllers
 {
@@ -79,7 +80,7 @@ namespace ExploreTandT.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Account");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -151,7 +152,7 @@ namespace ExploreTandT.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {PhoneNumber=model.PhoneNumber, UserName = model.Email, Email = model.Email , Address = model.Address, CNIC= model.CNIC, Name = model.Name};
+                var user = new ApplicationUser {PhoneNumber=model.PhoneNumber, UserName = model.Email, Email = model.Email , Address = model.Address, CNIC= model.CNIC, Name = model.Name, Type=model.Type};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -421,7 +422,100 @@ namespace ExploreTandT.Controllers
             }
 
             base.Dispose(disposing);
+            
         }
+
+        public ActionResult Index()
+        {
+            UserAccountViewModel user = new UserAccountViewModel();
+            ExploreEntities1 db = new ExploreEntities1();
+            RegisterViewModel loggedinuser = new RegisterViewModel();
+            string userid = User.Identity.GetUserId();
+            var person = db.AspNetUsers.Where(y => y.Id == userid).First();
+            loggedinuser.Name = person.Name;
+            loggedinuser.Email = person.Email;
+            loggedinuser.Address = person.Address;
+            loggedinuser.CNIC = person.CNIC;
+            loggedinuser.PhoneNumber = person.PhoneNumber;
+
+            user.listofusers.Add(loggedinuser);
+
+            List<SelectedPackagesViewModel> l = new List<SelectedPackagesViewModel>();
+            var packageslist = db.SelectedPacakges.ToList();
+            if (packageslist != null)
+            {
+                foreach (var p in packageslist)
+                {
+                    SelectedPackagesViewModel allpack = new SelectedPackagesViewModel();
+                    allpack.Name = p.Name;
+                    allpack.Category = p.Category;
+                    allpack.Places = p.Places;
+                    allpack.Range = Convert.ToInt16(p.Range);
+                    allpack.TourGuide = p.TourGuide;
+                    allpack.Schedule = p.Schedule;
+                    allpack.Vehicle = p.Vehicle;
+                    allpack.Hotel = p.Hotel;
+                    allpack.Refreshments = p.Refreshments;
+                    allpack.AddedBy = User.Identity.GetUserId();
+                    allpack.AddedOn = Convert.ToDateTime(p.AddedOn);
+
+                    user.listofpackages.Add(allpack);
+
+                }
+            }
+
+            return View(user);
+        }
+
+        public ActionResult IndexLame()
+        {
+            return View();
+            
+        }
+
+        public ActionResult Edit()
+        {
+            RegisterViewModel collection = new RegisterViewModel();
+            ExploreEntities1 db = new ExploreEntities1();
+            string userid = User.Identity.GetUserId();
+            var p = db.AspNetUsers.Where(x => x.Id == userid).First(); //Condition to check the Id of specific person to edit only his/her details
+
+
+            collection.Name = p.Name;
+            collection.Email = p.Email ;
+            collection.Address = p.Address ;
+            collection.CNIC = p.CNIC ;
+            collection.PhoneNumber = p.PhoneNumber;
+            
+            return View(collection);
+        }
+
+       
+        [HttpPost]
+        public ActionResult Edit(RegisterViewModel collection)
+        {
+            try
+            {
+                ExploreEntities1 db = new ExploreEntities1();
+                string userid = User.Identity.GetUserId();
+                var p = db.AspNetUsers.Where(x => x.Id == userid).First(); //Condition to check the Id of specific person to edit only his/her details
+
+                p.UserName = collection.Email;
+                p.Name = collection.Name;
+                p.Email = collection.Email;
+                p.Address = collection.Address;
+                p.CNIC = collection.CNIC;
+                p.PhoneNumber = collection.PhoneNumber;
+                db.SaveChanges();
+
+                return RedirectToAction("Index", "Account");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
 
         #region Helpers
         // Used for XSRF protection when adding external logins

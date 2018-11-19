@@ -12,6 +12,7 @@ namespace ExploreTandT.Models
         public string Address { get; internal set; }
         public string CNIC { get; internal set; }
         public string Name { get; internal set; }
+        public string Type { get; internal set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
